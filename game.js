@@ -664,7 +664,7 @@ fetchUnits(function(unit_array) {
   };
 
   Template.leaderboard.selected_name = function () {
-    var unit = Units.findOne(FEN: Session.get("selected_player"));
+    var unit = Units.findOne({_id: Session.get("selected_player")});
     return unit && unit.name;
   };
 
