@@ -1,0 +1,59 @@
+<head>
+  <title>test</title>
+</head>
+
+<body>
+ <div id="outer">
+    {{> game}}
+    {{> hello}}
+    {{> leaderboard}}
+
+    <canvas id="mainCanvas" width="1000" height="800">
+
+    </canvas>
+</div>
+</body>
+
+<template name="game">
+    <canvas id="mainCanvas" width="1000" height="800">
+
+    </canvas>
+
+</template>
+
+
+<template name="hello">
+  <h1>Hello World!!</h1>
+  {{greeting}}
+  <input type="button" value="Click" />
+</template>
+
+<template name="leaderboard">
+  <div class="leaderboard">
+    {{#each units}}
+      {{> unit}}
+    {{/each}}
+  </div>
+
+  {{#if selected_name}}
+  <div class="details">
+    <div class="name">{{selected_name}}</div>
+    <input type="button" class="inc" value="Give 5 points" />
+  </div>
+  {{/if}}
+
+  {{#unless selected_name}}
+  <div class="none">Click a player to select</div>
+  {{/unless}}
+</template>
+
+<template name="unit">
+  <div class="player {{selected}}">
+    <span class="name">{{name}}</span>
+    <span class="x">{{x}}</span>
+    <span class="x">{{y}}</span>
+    <span class="x">{{z}}</span>
+    <span class="x">{{gun}}</span>
+    <span class="x">{{orientation}}</span>
+  </div>
+</template>
