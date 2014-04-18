@@ -1,23 +1,38 @@
 <head>
-  <title>test</title>
+  <title>Isometric Demo</title>
 </head>
 
 <body>
+
+
  <div id="outer">
+    
+
     {{> game}}
+
+    <!--
     {{> leaderboard}}
 
-    <canvas id="mainCanvas" width="1000" height="800">
+    -->
 
-    </canvas>
 </div>
 </body>
 
 <template name="game">
+  <div>
+    <h3> If no little men are show below, please click this button to re-render the units <button type="button">Render</button> </h3>
+  </div>
+
     <canvas id="mainCanvas" width="1000" height="800">
 
     </canvas>
 
+    {{> auto_render}}
+
+</template>
+
+<template name="auto_render">
+  {{update}}
 </template>
 
 

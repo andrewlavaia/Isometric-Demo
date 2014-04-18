@@ -76,6 +76,10 @@ body {
 .inc {
   cursor: pointer;
 }
+
+button {
+  cursor: pointer;
+}
     .main{width:900px; margin:50px auto 0 auto;line-height:1.5;font-family: sans-serif;}
     .header{font:38px sans-serif;margin-bottom:20px;}
     .code{margin:0px 40px 10px 40px;width:960px;font-family:monospace;white-space: pre;}

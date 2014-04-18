@@ -17,13 +17,8 @@ if (Meteor.isClient) {
 
 Template.game.rendered = function() {
   
-  //do this only on template load
-  if(!this._rendered) {
-    this._rendered = true;
 
-    console.log('Template Loaded');
-  } //everything outside if is done every time the template is re-drawn (meteor sends an update)
-
+console.log('Template Loaded');
 
   // initialize the sheetengine
   var canvasElement = document.getElementById('mainCanvas');
@@ -557,8 +552,8 @@ fetchUnits(function(unit_array) {
         ctx.restore();
       }
       
-      var time_completed = Date.now()-timer;
-      console.log("main loop completed: " + time_completed);
+      //var time_completed = Date.now()-timer;
+      //console.log("main loop completed: " + time_completed); 
 
     }
 
@@ -625,7 +620,18 @@ fetchUnits(function(unit_array) {
 
 
 
+
 } //end template
+
+Template.game.events({
+    'click button' : function () {
+        Session.set("update", "Rendered: " + Date.now());
+      }
+    });
+
+  Template.auto_render.update = function() {
+    console.log(Session.get("update"));
+  };
 
 /*
   // Function that redraws the entire canvas from shapes in Meteor.Collection
