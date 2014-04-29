@@ -16,8 +16,8 @@
   <div>
     <h3> Instructions: </h3>
     <h4> 1) If no little people are shown below, please click this button to render the units:   <button type="button">Render</button> </h4>
-    <h4> 2) Click one of the little guys and then click anywhere on the map to make the unit move.  
-    <h4> 3) Open another browser and watch how all of the positions of the units are updated in real time.
+    <h4> 2) Click one of the little guys and then click anywhere on the map to make the unit move.  </h4>
+    <h4> 3) Open another browser and watch how all of the positions of the units are updated in real time. </h4>
   </div>
 
     <canvas id="mainCanvas" width="1000" height="800">
@@ -33,38 +33,3 @@
 </template>
 
 
-<template name="hello">
-  <h1>Hello World!!</h1>
-  {{greeting}}
-  <input type="button" value="Click" />
-</template>
-
-<template name="leaderboard">
-  <div class="leaderboard">
-    {{#each units}}
-      {{> unit}}
-    {{/each}}
-  </div>
-
-  {{#if selected_name}}
-  <div class="details">
-    <div class="name">{{selected_name}}</div>
-    <input type="button" class="inc" value="Give 5 points" />
-  </div>
-  {{/if}}
-
-  {{#unless selected_name}}
-  <div class="none">Click a player to select</div>
-  {{/unless}}
-</template>
-
-<template name="unit">
-  <div class="player {{selected}}">
-    <span class="name">{{name}}</span>
-    <span class="x">{{x}}</span>
-    <span class="x">{{y}}</span>
-    <span class="x">{{z}}</span>
-    <span class="x">{{gun}}</span>
-    <span class="x">{{orientation}}</span>
-  </div>
-</template>
