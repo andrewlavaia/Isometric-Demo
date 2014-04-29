@@ -1,24 +1,19 @@
-// Set up a collection to contain player information. On the server,
-// it is backed by a MongoDB collection named "players".
 
 Units = new Meteor.Collection("units");
 
 
-//ADMIN TOOL: quickly add units to db to test limits
+//ADMIN TOOL: quickly add units to db for capacity test
 /*
   for (var i = 0; i < 100; i++) {
     Units.insert({name: "Bob" + i, x: Math.floor(Random.fraction()*10)*10 -100, y: Math.floor(Random.fraction()*10)*5 -100, z: 0, orientation: 0, gun: "Rifle"});
   }
 */
 
-
 if (Meteor.isClient) {
-
 
 Template.game.rendered = function() {
   
-
-console.log('Template Loaded');
+  console.log('Template Loaded');
 
   // initialize the sheetengine
   var canvasElement = document.getElementById('mainCanvas');
@@ -47,205 +42,188 @@ console.log('Template Loaded');
 
   //only 1 large basesheet needed for now
   var basesheet = new sheetengine.BaseSheet({x:800,y:800,z:600}, {alphaD:90,betaD:0,gammaD:0}, {w:800,h:800});
-      basesheet.color = '#5D7E36';
+  basesheet.color = '#5D7E36';
 
-      // generate a density map
-      var densityMap = new sheetengine.DensityMap(5); 
-            
-      // define some sheets to test collision detection
-      //ramp side 1
-      var sheet = new sheetengine.Sheet({x:-29,y:0,z:11}, {alphaD:90,betaD:00,gammaD:20}, {w:60,h:60});
-      sheet.context.fillStyle = '#FFF';
-      sheet.context.fillRect(0,0,60,60);
-
-      //ramp side 2
-      sheet = new sheetengine.Sheet({x:28,y:0,z:11}, {alphaD:90,betaD:00,gammaD:-20}, {w:60,h:60});
-      sheet.context.fillStyle = '#FFF';
-      sheet.context.fillRect(0,0,60,60);
-      
+  // generate a density map
+  var densityMap = new sheetengine.DensityMap(5); 
         
-      //load cube image
-      var img = new Image();
-      img.src = 'rockwall.png';
-      
-      img.onload = function() {
-        //cube front
-        sheet = new sheetengine.Sheet({x:0,y:-130,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
-        sheet.context.drawImage(img, 0,0);
-        densityMap.addSheet(sheet);
+  // define some sheets to test collision detection
+  //ramp side 1
+  var sheet = new sheetengine.Sheet({x:-29,y:0,z:11}, {alphaD:90,betaD:00,gammaD:20}, {w:60,h:60});
+  sheet.context.fillStyle = '#FFF';
+  sheet.context.fillRect(0,0,60,60);
 
-        //cube side 1
-        sheet = new sheetengine.Sheet({x:20,y:-150,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
-        sheet.context.drawImage(img, 0,0);
-        densityMap.addSheet(sheet);
-
-        //cube side 2
-        sheet = new sheetengine.Sheet({x:-20,y:-150,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
-        sheet.context.drawImage(img, 0,0);
-        densityMap.addSheet(sheet);
-
-        //cube back
-        sheet = new sheetengine.Sheet({x:0,y:-170,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
-        sheet.context.drawImage(img, 0,0);
-        densityMap.addSheet(sheet);
-
-        //cube top
-        sheet = new sheetengine.Sheet({x:0,y:-150,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
-        sheet.context.drawImage(img, 0,0);
-        densityMap.addSheet(sheet);
-
-        scenechanged = true;
-        sheetengine.calc.calculateChangedSheets();
-        sheetengine.drawing.drawScene(true);
-      };
-      img.onerror = function() {console.log("Image failed!");};
-      
-
-      //wall front
-      sheet = new sheetengine.Sheet({x:-150,y:20,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
-      sheet.context.fillStyle = '#FFF';
-      sheet.context.fillRect(0,0,40,40);
-
-      //wall side
-      sheet = new sheetengine.Sheet({x:-130,y:0,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
-      sheet.context.fillStyle = '#FFF';
-      sheet.context.fillRect(0,0,40,40);
-
-      //assign all sheets to density map
-      densityMap.addSheets(sheetengine.sheets);
+  //ramp side 2
+  sheet = new sheetengine.Sheet({x:28,y:0,z:11}, {alphaD:90,betaD:00,gammaD:-20}, {w:60,h:60});
+  sheet.context.fillStyle = '#FFF';
+  sheet.context.fillRect(0,0,60,60);
+  
     
+  //load cube image
+  var img = new Image();
+  img.src = 'rockwall.png';
+  
+  img.onload = function() {
+    //cube front
+    sheet = new sheetengine.Sheet({x:0,y:-130,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
+    sheet.context.drawImage(img, 0,0);
+    densityMap.addSheet(sheet);
+
+    //cube side 1
+    sheet = new sheetengine.Sheet({x:20,y:-150,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
+    sheet.context.drawImage(img, 0,0);
+    densityMap.addSheet(sheet);
+
+    //cube side 2
+    sheet = new sheetengine.Sheet({x:-20,y:-150,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
+    sheet.context.drawImage(img, 0,0);
+    densityMap.addSheet(sheet);
+
+    //cube back
+    sheet = new sheetengine.Sheet({x:0,y:-170,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
+    sheet.context.drawImage(img, 0,0);
+    densityMap.addSheet(sheet);
+
+    //cube top
+    sheet = new sheetengine.Sheet({x:0,y:-150,z:40}, {alphaD:90,betaD:0,gammaD:0}, {w:40,h:40});
+    sheet.context.drawImage(img, 0,0);
+    densityMap.addSheet(sheet);
+
+    scenechanged = true;
+    sheetengine.calc.calculateChangedSheets();
+    sheetengine.drawing.drawScene(true);
+  };
+  img.onerror = function() {console.log("Image failed!");};
+  
+
+  //wall front
+  sheet = new sheetengine.Sheet({x:-150,y:20,z:20}, {alphaD:0,betaD:0,gammaD:0}, {w:40,h:40});
+  sheet.context.fillStyle = '#FFF';
+  sheet.context.fillRect(0,0,40,40);
+
+  //wall side
+  sheet = new sheetengine.Sheet({x:-130,y:0,z:20}, {alphaD:0,betaD:0,gammaD:90}, {w:40,h:40});
+  sheet.context.fillStyle = '#FFF';
+  sheet.context.fillRect(0,0,40,40);
+
+  //assign all sheets to density map
+  densityMap.addSheets(sheetengine.sheets);
 
 
 
+  // function for creating a character with a body and 2 legs
+  function defineCharacter(centerp, guntype) {
+    // character definition for animation with sheet motion
+    var body = new sheetengine.Sheet({x:0,y:0,z:15}, {alphaD:0,betaD:0,gammaD:0}, {w:11,h:14});
+    var backhead = new sheetengine.Sheet({x:0,y:-1,z:19}, {alphaD:0,betaD:0,gammaD:0}, {w:8,h:6});
+    backhead.context.fillStyle = '#9E7700';
+    backhead.context.fillRect(0,0,8,4);
 
-        // function for creating a character with a body and 2 legs
-        function defineCharacter(centerp, guntype) {
-          // character definition for animation with sheet motion
-          var body = new sheetengine.Sheet({x:0,y:0,z:15}, {alphaD:0,betaD:0,gammaD:0}, {w:11,h:14});
-          var backhead = new sheetengine.Sheet({x:0,y:-1,z:19}, {alphaD:0,betaD:0,gammaD:0}, {w:8,h:6});
-          backhead.context.fillStyle = '#9E7700';
-          backhead.context.fillRect(0,0,8,4);
+    //guntype chosen by unit weapon type from database
+    var gun = new sheetengine.Sheet({x:-6,y:3,z:12}, {alphaD:90,betaD:20,gammaD:90}, {w:3,h:8});
+    if (guntype == 'Lazer') {
+      gun.context.fillStyle = 'orange';
+      gun.context.fillRect(0,0,3,8);
+    }
+    if (guntype == 'Rifle') {
+      gun.context.fillStyle = '#5C5C5C';
+      gun.context.fillRect(0,0,3,8);
+    }
 
-          //guntype chosen by unit weapon type from database
-          var gun = new sheetengine.Sheet({x:-6,y:3,z:12}, {alphaD:90,betaD:20,gammaD:90}, {w:3,h:8});
-          if (guntype == 'Lazer') {
-            gun.context.fillStyle = 'orange';
-            gun.context.fillRect(0,0,3,8);
+    // legs
+    var leg1 = new sheetengine.Sheet({x:-3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
+    leg1.context.fillStyle = '#000';
+    leg1.context.fillRect(0,0,5,10);
+    var leg2 = new sheetengine.Sheet({x:3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
+    leg2.context.fillStyle = '#000';
+    leg2.context.fillRect(0,0,5,10);
+
+    // define character object
+    var character = new sheetengine.SheetObject(centerp, {alphaD:0,betaD:0,gammaD:90}, [body,backhead,gun,leg1,leg2], {w:70, h:110, relu:10, relv:25});
+      
+    character.leg1 = leg1;
+    character.leg2 = leg2;
+    
+    var ctx = body.context;
+    
+    // head
+    ctx.fillStyle = '#FFE699';
+    ctx.fillRect(2,2,7,4);
+    ctx.fillStyle = '#550';
+    ctx.fillRect(2,0,7,2);
+    ctx.fillRect(2,2,1,1);
+    ctx.fillRect(8,2,1,1);
+
+    //left eye
+    ctx.beginPath();
+    ctx.arc(4, 3.5, 1, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+
+    //right eye
+    ctx.beginPath();
+    ctx.arc(7, 3.5, 1, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+
+    // body
+    ctx.fillStyle = '#5C85FF';
+    ctx.fillRect(0,6,11,7);
+    
+    //offhand
+    ctx.fillStyle = '#FFE699';
+    ctx.fillRect(10,11,1,2);
+
+    character.animationState = 0;
+
+    character.setDimming(true, true);
+
+    //should probably take these out of this character constructor at some point
+    units.push(character); //add to unit array
+    
+    if(activeunit === null) {
+      activeunit = units[0]; 
+    }
+
+    return character;
+  };
+
+  // function for animating character's sheets
+  function animateCharacter(character) {
+    var state = Math.floor( (character.animationState % 8) / 2);
+    var dir = (state == 0 || state == 3) ? 1 : -1;
+    
+    character.rotateSheet(character.leg1, {x:0,y:0,z:8}, {x:1,y:0,z:0}, dir * Math.PI/8);
+    character.rotateSheet(character.leg2, {x:0,y:0,z:8}, {x:1,y:0,z:0}, -dir * Math.PI/8);
+  }      
+          
+
+  //HELPER: creates an asyncronous loop
+  var asyncLoop = function(o){
+    var i=-1;
+    var loop = function(){
+          i++;
+          if(i==o.length){
+            o.callback(); 
+            return;
           }
-          if (guntype == 'Rifle') {
-            gun.context.fillStyle = '#5C5C5C';
-            gun.context.fillRect(0,0,3,8);
-          }
-
-          // legs
-          var leg1 = new sheetengine.Sheet({x:-3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
-          leg1.context.fillStyle = '#000';
-          leg1.context.fillRect(0,0,5,10);
-          var leg2 = new sheetengine.Sheet({x:3,y:0,z:4}, {alphaD:0,betaD:0,gammaD:0}, {w:5,h:8});
-          leg2.context.fillStyle = '#000';
-          leg2.context.fillRect(0,0,5,10);
-
-          // define character object
-          var character = new sheetengine.SheetObject(centerp, {alphaD:0,betaD:0,gammaD:90}, [body,backhead,gun,leg1,leg2], {w:70, h:110, relu:10, relv:25});
-            
-          character.leg1 = leg1;
-          character.leg2 = leg2;
-          
-          var ctx = body.context;
-          
-          // head
-          ctx.fillStyle = '#FFE699';
-          ctx.fillRect(2,2,7,4);
-          ctx.fillStyle = '#550';
-          ctx.fillRect(2,0,7,2);
-          ctx.fillRect(2,2,1,1);
-          ctx.fillRect(8,2,1,1);
-
-          //left eye
-          ctx.beginPath();
-          ctx.arc(4, 3.5, 1, 0, 2 * Math.PI, false);
-          ctx.fillStyle = 'black';
-          ctx.fill();
-
-          //right eye
-          ctx.beginPath();
-          ctx.arc(7, 3.5, 1, 0, 2 * Math.PI, false);
-          ctx.fillStyle = 'black';
-          ctx.fill();
-
-          // body
-          ctx.fillStyle = '#5C85FF';
-          ctx.fillRect(0,6,11,7);
-          
-          //offhand
-          ctx.fillStyle = '#FFE699';
-          ctx.fillRect(10,11,1,2);
-
-          character.animationState = 0;
-
-          character.setDimming(true, true);
-
-          //should probably take these out of this character constructor at some point
-          units.push(character); //add to unit array
-          
-          if(activeunit === null) {
-            activeunit = units[0]; 
-          }
-
-          return character;
-        };
-        
-        // function for animating character's sheets
-        function animateCharacter(character) {
-          var state = Math.floor( (character.animationState % 8) / 2);
-          var dir = (state == 0 || state == 3) ? 1 : -1;
-          
-          character.rotateSheet(character.leg1, {x:0,y:0,z:8}, {x:1,y:0,z:0}, dir * Math.PI/8);
-          character.rotateSheet(character.leg2, {x:0,y:0,z:8}, {x:1,y:0,z:0}, -dir * Math.PI/8);
-        }      
-        
-
-
-  //build all units needed for game (unit types and stats would be populated from database) - uses call back function
-  /*
-  function createUnits(fetchUnits) {
-    var units_db = fetchUnits();
-    units_db.forEach(function(u) {
-      var character = defineCharacter({x:u.x,y:u.y,z:0}, u.gun);
-      character.name = u.name;
-      character.id = u._id;
-    });
-    console.log("units displayed");
+          o.functionToLoop(loop, i);
+    } 
+    loop();//init
   }
-  */
-  //createUnits(fetchUnits);
-
-//HELPER: creates an asyncronous loop
-var asyncLoop = function(o){
-  var i=-1;
-  var loop = function(){
-        i++;
-        if(i==o.length){
-          o.callback(); 
-          return;
-        }
-        o.functionToLoop(loop, i);
-  } 
-  loop();//init
-}
 
 
-function fetchUnits(callback) {
-  var mongo_units = Units.find().fetch();
-  callback(mongo_units);
-}
+  function fetchUnits(callback) {
+    var mongo_units = Units.find().fetch();
+    callback(mongo_units);
+  }
 
-/* Fetches units from database and passes them as an array
- * to callback function. Callback function runs an asynchronous
- * loop to load each unit individually. Async loop has a separate
- * callback function to log once all units have been displayed.
- */
-fetchUnits(function(unit_array) {
+  /* Fetches units from database and passes them as an array
+   * to callback function. Callback function runs an asynchronous
+   * loop to load each unit individually. Async loop has a separate
+   * callback function to log once all units have been displayed.
+   */
+  fetchUnits(function(unit_array) {
     console.log("Units fetched");
 
     asyncLoop({
@@ -267,60 +245,7 @@ fetchUnits(function(unit_array) {
         }    
     });
 
-});
-
-
-
-
-/*
-  function fetchUnits(createUnits) {
-    var units_db = Units.find();
-    console.log("units fetched");
-    createUnits(units_db);
-  } 
-
-  fetchUnits(function(units_db) {
-    units_db.forEach(function(u) {
-      var character = defineCharacter({x:u.x,y:u.y,z:u.z}, u.gun);
-      character.setOrientation({alpha: 0, beta: 0, gamma: u.orientation});
-      character.name = u.name;
-      character.id = u._id;
-    });
-    console.log("units displayed");
   });
-*/
-  /*
-  Deps.autorun(function () {
-    if(Session.equals("scenechanged", true)){
-      Session.set("scenechanged", false);
-      console.log("scene updated");
-      sheetengine.calc.calculateChangedSheets();
-      sheetengine.drawing.drawScene();
-      sheetengine.context.restore();
-    }
-  });
-
-  */
-
-  /*
-  for (var i=0; i< units_db.count(); i++) {
-    var gun = 'Rifle';
-    var character = defineCharacter({x:110,y:i,z:0}, gun);
-    character.name = 'John boy ' + i ; 
-  }
-   */
-/*
-  var length = units.length;
-  var unit = null;
-  for (var i = 0; i < length; i++) {
-    unit = units[i];
-    //Tranparent objects (1st param = allows sheets to dim, 2nd param = this object never dims)
-    unit.setDimming(true, true);
-    sheetengine.drawing.dimmedAlpha = .5; //level of transparency for canvas (must be between 0 and 1)
-  }
-*/
-
-
 
   // draw initial scene
   sheetengine.calc.calculateAllSheets();
@@ -563,31 +488,6 @@ fetchUnits(function(unit_array) {
 
   var FPS = 30;
   setInterval(mainloop, 1000/FPS);
-
-
-  /* 
-  STUFF TO ADD
-
-  shooting, one bullet object used repeatedly
-
-  texture images on characters or ground or objects
-
-  simple database with 2 teams of units to practice with
-    for now just: unit type, unit name, health, attack, weapon type, x,y,z coordinates
-
-  deployment mode
-
-  max movement range
-
-  attack button
-
-  design vehicle object
-
-  inverse custom view transformation
-
-  death animation (all sheets drop individually to floor dramatically?)
-
-  */
     
 
   Units.find().observeChanges({
@@ -618,91 +518,20 @@ fetchUnits(function(unit_array) {
     },
   });
 
-
-
-
-} //end template
+} // end Template.game.rendered
 
 Template.game.events({
     'click button' : function () {
         Session.set("update", "Rendered: " + Date.now());
       }
-    });
+});
 
-  Template.auto_render.update = function() {
-    console.log(Session.get("update"));
-  };
-
-/*
-  // Function that redraws the entire canvas from shapes in Meteor.Collection
-  function drawShapes() {
-    var shapes = Units.find();
-    shapes.forEach(function() {
-      console.log("draw");
-      // draw each on canvas
-    });
-  }
-
-  var startUpdateListener = function() {
-    // Function called each time 'Units' is updated.
-    var redrawCanvas = function() {
-      var context = Meteor.Deps.Context();
-      context.on_invalidate(redrawCanvas); // Ensures this is recalled for each update
-      context.run(function() {
-        drawShapes();
-      });
-    }
-    redrawCanvas();
-  }
-*/
+Template.auto_render.update = function() {
+  console.log(Session.get("update"));
+};
 
 
-
-  // etc
-/*
-  Meteor.startup(function() {
-    startUpdateListener();
-    console.log("startup listener began");
-  });
-*/
-  Template.leaderboard.units = function () {
-    return Units.find({}, {sort: {x: -1, name:1}});; //mongoDB .sort() method not available in meteor at this time (v0.6.4)
-  };
-
-  Template.leaderboard.selected_name = function () {
-    var unit = Units.findOne({_id: Session.get("selected_player")});
-    return unit && unit.name;
-  };
-
-  Template.leaderboard.events({
-    'click input.inc': function () {
-      Units.update(Session.get("selected_player"), {$inc: {x: 5}});
-    }
-  });
-
-  Template.unit.selected = function () {
-    return Session.equals("selected_player", this._id) ? "selected" : '';
-  };
-
-  Template.unit.events({
-    'click': function () {
-      Session.set("selected_player", this._id);
-    }
-  });
-
-  Template.hello.greeting = function () {
-  return "Welcome to test.";
-  };
-
-  Template.hello.events({
-    'click input' : function () {
-      // template data, if any, is available in 'this'
-      if (typeof console !== 'undefined')
-        console.log("You pressed the button");
-    }
-  });
-
-}
+} // end if(Meteor.isClient)
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
@@ -716,17 +545,5 @@ if (Meteor.isServer) {
       for (var i = 0; i < names.length; i++)
         Units.insert({name: names[i], x: Math.floor(Random.fraction()*10)*10 -100, y: Math.floor(Random.fraction()*10)*5 -100, z: 0, orientation: 0, gun: "Rifle"});
     }
-
-
-
-      /*
-      function fetchUnits() {
-        var units_db = Units.find();
-        console.log("units fetched");
-        return units_db;
-      }
-
-      fetchUnits();
-      */
   });
 }
