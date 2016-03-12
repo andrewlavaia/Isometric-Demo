@@ -14,19 +14,20 @@
 </body>
 
 <template name="parentTemplate">
-	<button type="button">Click to Load!</button>
+	
 	  {{#if count}}
 	    {{> game}}
 	  {{else}}
-	  	{{> loading}}
+	  	<h3>Welcome to my Isometric Demo. Please click the below button when ready.</h3>
+	  	<button type="button">Click to Load!</button>
 	  {{/if}}
 </template>
 
 <template name="game">
   <div>
     <h3> Instructions: </h3>
-    <h4> 1) If no little people are shown below, please click this button to render the units:   <button type="button">Render</button> </h4>
-    <h4> 2) Click one of the little guys and then click anywhere on the map to make the unit move.  </h4>
+    <h4> 1) Click on one of the little guys and then click anywhere on the map to make the unit move.  </h4>
+    <h4> 2) The little guys can travel up the ramp but not through walls.  </h4>
     <h4> 3) Open another browser and watch how all of the positions of the units are updated in real time. </h4>
   </div>
 
@@ -40,11 +41,4 @@
 
 <template name="auto_render">
   {{update}}
-</template>
-
-<template name="loading">
-  <div>
-    <h3> Loading.... </h3>
-  </div>
-
 </template>
