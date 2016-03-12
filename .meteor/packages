@@ -8,3 +8,4 @@ insecure
 standard-minifiers
 mongo
 standard-app-packages
+reactive-var

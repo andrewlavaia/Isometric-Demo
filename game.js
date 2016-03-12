@@ -11,7 +11,7 @@ Units = new Mongo.Collection("units");
 
 if (Meteor.isClient) {
 
-Template.game.rendered = function() {
+Template.game.rendered= function() {
   
   console.log('Template Loaded');
 
@@ -250,11 +250,6 @@ Template.game.rendered = function() {
   // draw initial scene
   sheetengine.calc.calculateAllSheets();
   sheetengine.drawing.drawScene(true);
-
-
-
-
-
         
 
 
@@ -347,7 +342,7 @@ Template.game.rendered = function() {
     //Needed because activeunit is not set until the first unit loads
     if(units.length === 0) {
       return;
-    }
+    } 
 
 
     var move = 0;
@@ -523,12 +518,53 @@ Template.game.rendered = function() {
 Template.game.events({
     'click button' : function () {
         Session.set("update", "Rendered: " + Date.now());
-      }
+}
 });
 
-Template.auto_render.update = function() {
-  console.log(Session.get("update"));
-};
+Template.auto_render.helpers({
+	'update' : function() {
+  		console.log(Session.get("update"));
+	}
+});
+
+Template.parentTemplate.onCreated(function(){
+  this.count = new ReactiveVar(0);
+});
+
+Template.parentTemplate.onRendered(function(){
+  this.autorun(function(){
+    var count = this.count.get();
+    if(count == 10){
+      this.count.set(0);
+    }
+  }.bind(this));
+});
+
+Template.parentTemplate.helpers({
+	unitsLoaded : function() {
+		if (count == 0) 
+			false;
+		else
+			true;
+	},
+	count: function(){
+    	return Template.instance().count.get();
+  	}
+});
+
+Template.parentTemplate.events({
+  "click button": function(event, template){
+    var count = template.count.get();
+    template.count.set(Units.find().count());
+    console.log(count);
+  }
+});
+
+Tracker.autorun(function () {
+  //parentTemplate.unitsLoaded();
+  console.log('Autorun is auto-running!');
+  //console.log(count);
+});
 
 
 } // end if(Meteor.isClient)

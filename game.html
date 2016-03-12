@@ -7,10 +7,20 @@
 
  <div id="outer">
     
-    {{> game}}
+
+    {{> parentTemplate}}
 
 </div>
 </body>
+
+<template name="parentTemplate">
+	<button type="button">Click to Load!</button>
+	  {{#if count}}
+	    {{> game}}
+	  {{else}}
+	  	{{> loading}}
+	  {{/if}}
+</template>
 
 <template name="game">
   <div>
@@ -32,4 +42,9 @@
   {{update}}
 </template>
 
+<template name="loading">
+  <div>
+    <h3> Loading.... </h3>
+  </div>
 
+</template>
