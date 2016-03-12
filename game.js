@@ -1,5 +1,5 @@
 
-Units = new Meteor.Collection("units");
+Units = new Mongo.Collection("units");
 
 
 //ADMIN TOOL: quickly add units to db for capacity test
